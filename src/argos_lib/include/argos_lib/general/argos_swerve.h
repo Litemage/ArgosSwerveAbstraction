@@ -189,10 +189,13 @@ class ArgosSwerve {
   ArgosSwerve() = delete;
 
   /**
-   * @brief Construct a new Argos Swerve object
+   * @brief Construct a new Argos swerve object
+   *
+   *
    *
    * @param config Configuration containing all the swerve modules
    * @param imu Pointer to an ArgosIMU
+   * @param instance The instance of robot, (Competition? Practice?)
    * @param controlMode The control mode to initialize to
    */
   ArgosSwerve(const ArgosSwerveConfig<N>& config, ArgosIMU* imu,
