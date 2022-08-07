@@ -7,11 +7,16 @@
 #include <frc2/command/SubsystemBase.h>
 
 #include "argos_lib/general/Framer.h"
+#include "argos_lib/general/argos_imu.h"
 #include "argos_lib/general/argos_swerve.h"
 #include "units/angle.h"
 
-class SwerveDriveSubsystem : public frc2::SubsystemBase,
-                             protected argos_lib::swerve::ArgosSwerve<4> {
+using argos_lib::swerve::ArgosAxis;
+using argos_lib::swerve::ArgosIMU;
+
+class SwerveDriveSubsystem
+    : public frc2::SubsystemBase,
+      protected argos_lib::swerve::ArgosSwerve<4, frc::ADIS16448_IMU> {
  public:
   SwerveDriveSubsystem();
 
@@ -33,9 +38,14 @@ class SwerveDriveSubsystem : public frc2::SubsystemBase,
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  frc::ADIS16448_IMU m_imu =
-      frc::ADIS16448_IMU(frc::ADIS16448_IMU::IMUAxis::kZ, frc::SPI::Port::kMXP,
-                         frc::ADIS16448_IMU::CalibrationTime::_8s);
+  frc::ADIS16448_IMU adisIMU =
+      frc::ADIS16448_IMU{frc::ADIS16448_IMU::kZ, frc::SPI::Port::kMXP,
+                         frc::ADIS16448_IMU::CalibrationTime::_8s};
+
+  ArgosIMU<frc::ADIS16448_IMU> m_imu = ArgosIMU<frc::ADIS16448_IMU>(
+      frc::ADIS16448_IMU{frc::ADIS16448_IMU::kZ, frc::SPI::Port::kMXP,
+                         frc::ADIS16448_IMU::CalibrationTime::_8s},
+      ArgosAxis::NegativeZ, ArgosAxis::NegativeX);
 
   Framer::RefFrame m_drivetrainFrame;
   bool m_drivetrainInitialized = false;

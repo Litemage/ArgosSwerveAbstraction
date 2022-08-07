@@ -14,8 +14,8 @@ namespace argos_lib::swerve {
 /* ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― */
 /*                   Argos Swerve Member Functions                  */
 /* ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― */
-template <int N>
-wpi::array<frc::SwerveModuleState, N> ArgosSwerve<N>::GetRawModuleStates(
+template <int N, typename IMU>
+wpi::array<frc::SwerveModuleState, N> ArgosSwerve<N, IMU>::GetRawModuleStates(
     Velocities velocities) {
   // IF SPEEDS ZERO, SET MOTORS TO ZERO AND RETURN
   if (velocities.vX == 0 && velocities.vY == 0 && velocities.vOmega == 0) {
@@ -51,8 +51,8 @@ wpi::array<frc::SwerveModuleState, N> ArgosSwerve<N>::GetRawModuleStates(
   return m_swerveKinematics.ToSwerveModuleStates(m_emptySpeeds);
 }
 
-template <int N>
-void ArgosSwerve<N>::HomeDrivetrainToFS(units::degree_t virtualAngle) {
+template <int N, typename IMU>
+void ArgosSwerve<N, IMU>::HomeDrivetrainToFS(units::degree_t virtualAngle) {
   std::vector<units::degree_t> moduleHomes;
   for (uint i = 0; i < m_modules.size(); i++) {
     moduleHomes.push_back(Framer::FoRConverter::CalculateHome(
@@ -64,15 +64,15 @@ void ArgosSwerve<N>::HomeDrivetrainToFS(units::degree_t virtualAngle) {
   m_fsStorage.SaveList(moduleHomes);
 }
 
-template <int N>
-void ArgosSwerve<N>::Home(units::degree_t virtualAngle) {
+template <int N, typename IMU>
+void ArgosSwerve<N, IMU>::Home(units::degree_t virtualAngle) {
   HomeDrivetrainToFS(virtualAngle);
   m_pImu->Reset();
   InitDrivetrainHomes();
 }
 
-template <int N>
-bool ArgosSwerve<N>::InitDrivetrainHomes() {
+template <int N, typename IMU>
+bool ArgosSwerve<N, IMU>::InitDrivetrainHomes() {
   std::optional<std::vector<units::degree_t>> modulePositions =
       m_fsStorage.LoadList(N);
   if (!modulePositions) {
@@ -90,16 +90,16 @@ bool ArgosSwerve<N>::InitDrivetrainHomes() {
   return true;
 }
 
-template <int N>
-void ArgosSwerve<N>::HomeFieldCentric(units::degree_t virtualAngle) {
+template <int N, typename IMU>
+void ArgosSwerve<N, IMU>::HomeFieldCentric(units::degree_t virtualAngle) {
   // GetAngle() negated because IMU board is physically inverted, causing
   // positive Z to become CW+
   m_fieldCentricHome =
       Framer::FoRConverter::CalculateHome(-m_pImu->GetAngle(), virtualAngle);
 }
 
-template <int N>
-void ArgosSwerve<N>::Drive(Velocities inputVelocities) {
+template <int N, typename IMU>
+void ArgosSwerve<N, IMU>::Drive(Velocities inputVelocities) {
   if (inputVelocities.vX == 0 && inputVelocities.vY == 0 &&
       inputVelocities.vOmega == 0) {
     StopDrivetrain();
@@ -123,8 +123,8 @@ void ArgosSwerve<N>::Drive(Velocities inputVelocities) {
   }
 }
 
-template <int N>
-void ArgosSwerve<N>::StopDrivetrain() {
+template <int N, typename IMU>
+void ArgosSwerve<N, IMU>::StopDrivetrain() {
   for (int i = 0; i < N; i++) {
     m_modules[i].m_drive.Set(0.0);
     m_modules[i].m_turn.Set(0.0);

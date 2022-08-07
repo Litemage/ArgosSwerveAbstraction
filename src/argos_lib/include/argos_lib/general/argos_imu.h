@@ -1,9 +1,11 @@
 /// \copyright Copyright (c) Argos FRC Team 1756.
 ///            Open Source Software; you can modify and/or share it under the
 ///            terms of the license file in the root directory of this project.
+#pragma once
+
 #include "ctre/phoenix/sensors/Pigeon2.h"
 #include "frc/ADIS16448_IMU.h"
-#include "units.h"
+#include "units/angle.h"
 
 using ctre::phoenix::sensors::AxisDirection;
 using ctre::phoenix::sensors::Pigeon2;
@@ -24,13 +26,15 @@ template <typename T>
 class ArgosIMU {
  public:
   explicit ArgosIMU(T imu, ArgosAxis upAxis, ArgosAxis forwardAxis)
-      : m_imu{imu}, m_upAxis{upAxis}, m_forwardAxis{forwardAxis} {
+      : m_imu{std::move(imu)}, m_upAxis{upAxis}, m_forwardAxis{forwardAxis} {
     Configure();
   }
-  void Configure(){/* by default, do nothing */};
-  units::degree_t GetYaw(){/* by default, do nothing */};
-  void Reset(){/* By default, do nothing */};
-  T *inline GetInstance() { return &m_imu; };
+  void Configure() { /* by default, do nothing */
+  }
+  units::degree_t GetAngle();
+  void Reset() { /* By default, do nothing */
+  }
+  T *GetInstance() { return &m_imu; }
 
  private:
   T m_imu;
@@ -80,7 +84,7 @@ inline void ArgosIMU<Pigeon2>::Configure() {
 
 /* ――――――――――――――――― Get the value of the yaw axis ―――――――――――――――― */
 template <>
-inline units::degree_t ArgosIMU<frc::ADIS16448_IMU>::GetYaw() {
+inline units::degree_t ArgosIMU<frc::ADIS16448_IMU>::GetAngle() {
   frc::ADIS16448_IMU *imu = &m_imu;
   units::degree_t currentAngle{imu->GetAngle()};
   // Handle that negative axis ambiguity here
@@ -91,7 +95,7 @@ inline units::degree_t ArgosIMU<frc::ADIS16448_IMU>::GetYaw() {
 }
 
 template <>
-inline units::degree_t ArgosIMU<Pigeon2>::GetYaw() {
+inline units::degree_t ArgosIMU<Pigeon2>::GetAngle() {
   Pigeon2 *imu = &m_imu;
   units::degree_t currentAngle{imu->GetYaw()};
   return currentAngle;

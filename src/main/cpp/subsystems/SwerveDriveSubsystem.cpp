@@ -21,7 +21,7 @@ ArgosSwerveConfig config =
                          swerveModulesBeta::bLModule};
 
 SwerveDriveSubsystem::SwerveDriveSubsystem()
-    : argos_lib::swerve::ArgosSwerve<4>(
+    : argos_lib::swerve::ArgosSwerve<4, frc::ADIS16448_IMU>(
           config, &m_imu, argos_lib::RobotInstance::Competition,
           argos_lib::swerve::SwerveControlMode::FIELD_CENTRIC),
       m_drivetrainFrame{Framer::StdFrames::WPIStd} {

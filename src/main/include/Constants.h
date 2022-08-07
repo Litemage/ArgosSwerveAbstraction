@@ -191,3 +191,6 @@ const ArgosModuleConfig brModule{
     address::backRightEncoder, address::backRightDrive, address::backRightTurn,
     measure_up::backRight, "drive"};
 }  // namespace swerveModulesBeta
+
+const ArgosModuleConfig frModule{1, 2, 3, frc::Translation2d{12_in, -10_in},
+                                 "drive"};

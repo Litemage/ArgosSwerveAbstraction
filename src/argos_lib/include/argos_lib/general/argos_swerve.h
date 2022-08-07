@@ -183,7 +183,7 @@ enum class SwerveControlMode { FIELD_CENTRIC, ROBOT_CENTRIC };
  * @brief Class containing basic functions of a drivetrain to build off of
  *
  */
-template <int N>
+template <int N, typename IMU>
 class ArgosSwerve {
  public:
   ArgosSwerve() = delete;
@@ -198,7 +198,7 @@ class ArgosSwerve {
    * @param instance The instance of robot, (Competition? Practice?)
    * @param controlMode The control mode to initialize to
    */
-  ArgosSwerve(const ArgosSwerveConfig<N>& config, ArgosIMU* imu,
+  ArgosSwerve(const ArgosSwerveConfig<N>& config, ArgosIMU<IMU>* imu,
               argos_lib::RobotInstance instance,
               SwerveControlMode controlMode = SwerveControlMode::FIELD_CENTRIC)
       : m_config{config},
@@ -375,7 +375,7 @@ class ArgosSwerve {
       m_instance;  ///< Robot instance. (Competition or Practice)
   SwerveControlMode m_controlMode;  ///< the current control mode of the robot
                                     ///< (Robot-centric or Field-centric)
-  ArgosIMU* m_pImu;  ///< Pointer to the IMU being used with the drivetrain
+  ArgosIMU<IMU>* m_pImu;  ///< Pointer to the IMU being used with the drivetrain
   FileSystemHomingStorage
       m_fsStorage;  ///< Object that handles saving and loading homes from files
   units::degree_t
