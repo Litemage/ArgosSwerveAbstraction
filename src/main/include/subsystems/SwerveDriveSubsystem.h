@@ -14,9 +14,9 @@
 using argos_lib::swerve::ArgosAxis;
 using argos_lib::swerve::ArgosIMU;
 
-class SwerveDriveSubsystem
-    : public frc2::SubsystemBase,
-      protected argos_lib::swerve::ArgosSwerve<4, frc::ADIS16448_IMU> {
+class SwerveDriveSubsystem : public frc2::SubsystemBase,
+                             protected argos_lib::swerve::ArgosSwerve<
+                                 4, ctre::phoenix::sensors::Pigeon2> {
  public:
   SwerveDriveSubsystem();
 
@@ -38,14 +38,11 @@ class SwerveDriveSubsystem
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  frc::ADIS16448_IMU adisIMU =
-      frc::ADIS16448_IMU{frc::ADIS16448_IMU::kZ, frc::SPI::Port::kMXP,
-                         frc::ADIS16448_IMU::CalibrationTime::_8s};
 
-  ArgosIMU<frc::ADIS16448_IMU> m_imu = ArgosIMU<frc::ADIS16448_IMU>(
-      frc::ADIS16448_IMU{frc::ADIS16448_IMU::kZ, frc::SPI::Port::kMXP,
-                         frc::ADIS16448_IMU::CalibrationTime::_8s},
-      ArgosAxis::NegativeZ, ArgosAxis::NegativeX);
+  ctre::phoenix::sensors::Pigeon2 pigeon{1, "drive"};
+
+  ArgosIMU<ctre::phoenix::sensors::Pigeon2> m_pigeon{
+      &pigeon, ArgosAxis::PositiveZ, ArgosAxis::PositiveY};
 
   Framer::RefFrame m_drivetrainFrame;
   bool m_drivetrainInitialized = false;

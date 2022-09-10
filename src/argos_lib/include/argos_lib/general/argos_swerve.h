@@ -255,6 +255,8 @@ class ArgosSwerve {
 
   /**
    * @brief Saves new homes, resets the imu, and immediately initializes motors;
+   * NOTE: intended to be a utility function for debugging / library
+   * development.
    *
    * @param virtualAngle
    */
