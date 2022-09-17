@@ -65,13 +65,6 @@ void ArgosSwerve<N, IMU>::HomeDrivetrainToFS(units::degree_t virtualAngle) {
 }
 
 template <int N, typename IMU>
-void ArgosSwerve<N, IMU>::Home(units::degree_t virtualAngle) {
-  HomeDrivetrainToFS(virtualAngle);
-  m_pImu->Reset();
-  InitDrivetrainHomes();
-}
-
-template <int N, typename IMU>
 bool ArgosSwerve<N, IMU>::InitDrivetrainHomes() {
   std::optional<std::vector<units::degree_t>> modulePositions =
       m_fsStorage.LoadList(N);

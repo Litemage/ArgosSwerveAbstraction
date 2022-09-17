@@ -254,15 +254,6 @@ class ArgosSwerve {
   virtual void HomeDrivetrainToFS(units::degree_t virtualAngle);
 
   /**
-   * @brief Saves new homes, resets the imu, and immediately initializes motors;
-   * NOTE: intended to be a utility function for debugging / library
-   * development.
-   *
-   * @param virtualAngle
-   */
-  virtual void Home(units::degree_t virtualAngle);
-
-  /**
    * @brief Reset the IMU to zero
    *
    */
