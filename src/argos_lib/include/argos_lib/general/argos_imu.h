@@ -34,6 +34,11 @@ class ArgosIMU {
   units::degree_t GetAngle();
   void Reset() { /* By default, do nothing */
   }
+  /**
+   * @brief Allow consumers to get the IMU instance
+   *
+   * @return T*
+   */
   T *GetInstance() { return m_imu; }
 
  private:
@@ -113,7 +118,5 @@ inline void ArgosIMU<Pigeon2>::Reset() {
   Pigeon2 *imu = m_imu;
   imu->SetYaw(0);
 }
-
-/* ―――――― Allow consumers to get the respective imu instance ―――――― */
 
 }  // namespace argos_lib::swerve
