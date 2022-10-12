@@ -6,8 +6,8 @@
 
 #include <vector>
 
-#include "argos_lib/general/Framer.h"
 #include "argos_lib/general/argos_swerve.h"
+#include "argos_lib/general/swerve_utils.h"
 #include "units/angle.h"
 
 namespace argos_lib::swerve {
@@ -55,10 +55,9 @@ template <int N, typename IMU>
 void ArgosSwerve<N, IMU>::HomeDrivetrainToFS(units::degree_t virtualAngle) {
   std::vector<units::degree_t> moduleHomes;
   for (uint i = 0; i < m_modules.size(); i++) {
-    moduleHomes.push_back(Framer::FoRConverter::CalculateHome(
-        units::make_unit<units::degree_t>(
-            m_modules[i].m_encoder.GetAbsolutePosition()),
-        virtualAngle));
+    moduleHomes.push_back(units::make_unit<units::angle::degree_t>(
+                              m_modules[i].m_encoder.GetAbsolutePosition()) -
+                          virtualAngle);
   }
 
   m_fsStorage.SaveList(moduleHomes);
@@ -74,10 +73,14 @@ bool ArgosSwerve<N, IMU>::InitDrivetrainHomes() {
     return false;
   }
   for (uint i = 0; i < m_modules.size(); i++) {
-    units::degree_t encoderRelativePos = Framer::FoRConverter::InitHome(
-        units::make_unit<units::degree_t>(
-            m_modules[i].m_encoder.GetAbsolutePosition()),
-        modulePositions.value()[i]);
+    // Hardware - Saved home value gives relative position in terms of saved
+    // home
+    units::degree_t encoderRelativePos = units::make_unit<units::degree_t>(
+        m_modules[i].m_encoder.GetAbsolutePosition() -
+        modulePositions.value()[i].to<double>());
+    // Constrain angle
+    encoderRelativePos = ConstrainAngle(encoderRelativePos, 0_deg, 360_deg);
+    // Set position to motor
     m_modules[i].m_encoder.SetPosition(encoderRelativePos.to<double>());
   }
   return true;
@@ -88,7 +91,8 @@ void ArgosSwerve<N, IMU>::HomeFieldCentric(units::degree_t virtualAngle) {
   // GetAngle() negated because IMU board is physically inverted, causing
   // positive Z to become CW+
   m_fieldCentricHome =
-      Framer::FoRConverter::CalculateHome(-m_pImu->GetAngle(), virtualAngle);
+      // Calculate home with current hardware value - virtual angle
+      -m_pImu->GetAngle() - virtualAngle;
 }
 
 template <int N, typename IMU>

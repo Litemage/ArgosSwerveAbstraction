@@ -6,7 +6,6 @@
 
 #include <frc2/command/SubsystemBase.h>
 
-#include "argos_lib/general/Framer.h"
 #include "argos_lib/general/argos_imu.h"
 #include "argos_lib/general/argos_swerve.h"
 #include "units/angle.h"
@@ -44,6 +43,5 @@ class SwerveDriveSubsystem : public frc2::SubsystemBase,
   ArgosIMU<ctre::phoenix::sensors::Pigeon2> m_pigeon{
       &pigeon, ArgosAxis::PositiveZ, ArgosAxis::PositiveY};
 
-  Framer::RefFrame m_drivetrainFrame;
   bool m_drivetrainInitialized = false;
 };
