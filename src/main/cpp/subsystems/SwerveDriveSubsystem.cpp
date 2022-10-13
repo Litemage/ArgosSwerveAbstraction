@@ -23,10 +23,12 @@ ArgosSwerveConfig config =
 SwerveDriveSubsystem::SwerveDriveSubsystem()
     : argos_lib::swerve::ArgosSwerve<4, ctre::phoenix::sensors::Pigeon2>(
           config, &m_pigeon, argos_lib::RobotInstance::Competition,
-          argos_lib::swerve::SwerveControlMode::FIELD_CENTRIC){
+          argos_lib::swerve::SwerveControlMode::FIELD_CENTRIC) {
   /* ―――――――――――――――――― Configure all drive motors ―――――――――――――――――― */
   /* Note: remember that the indexes are in the order in which the modules are
    * supplied in the configuration */
+  // TODO validate
+  //  Validated <-- move this tag as stuff is validated
   ConfigAllModuleDevice<motorConfigs::genericDrive, motorConfigs::genericDrive>(
       ModuleDevice::Drive);
   /* ――――――――――――――――――――― Configure turn motors ―――――――――――――――――――― */
