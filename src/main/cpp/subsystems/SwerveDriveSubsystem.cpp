@@ -13,7 +13,7 @@ using argos_lib::swerve::ArgosSwerveConfig;
 
 ArgosSwerveConfig config =
     ArgosSwerveConfig<4>{4096,
-                         std::string("/homes/swerveHomes"),
+                         std::string("/home/lvuser/homes/swerveHomes"),
                          12_fps,
                          swerveModulesBeta::fLModule,
                          swerveModulesBeta::frModule,
@@ -78,12 +78,13 @@ void SwerveDriveSubsystem::SwerveDrive(double forward, double left,
 }
 
 void SwerveDriveSubsystem::Home(units::degree_t virtualAngle) {
+  std::printf("SAVING HOMES TO FILE SYSTEM\n");
   HomeDrivetrainToFS(virtualAngle);
 }
 
 void SwerveDriveSubsystem::ResetIMU() { ResetIMU(); }
 
 void SwerveDriveSubsystem::InitializeFromHomes() {
-  printf("INITIALIZING FROM HOMES");
+  printf("INITIALIZING FROM HOMES\n");
   m_drivetrainInitialized = InitDrivetrainHomes();
 }

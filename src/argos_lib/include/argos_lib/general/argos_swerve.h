@@ -137,7 +137,11 @@ class ArgosSwerveConfig {
    *
    * @return const std::string
    */
-  const std::string GetHomesPath() const { return m_homesPath; }
+  const std::string GetHomesPath() const {
+    return m_homesPath;
+    // TODO debugging
+    printf("File path: %s\n", m_homesPath.c_str());
+  }
 
   /**
    * @brief Gets the conversion factor for the encoder on the turn motor, in
@@ -316,17 +320,14 @@ class ArgosSwerve {
                           units::time::millisecond_t timeout = 100_ms) {
     switch (dev) {
       case ModuleDevice::Turn:
-        std::cout << "ATTEMPTING TO CONFIGURE A TURN MOTOR\n";
         argos_lib::falcon_config::FalconConfig<Competition, Practice>(
             m_modules[moduleIndex].m_turn, timeout, m_instance);
         break;
       case ModuleDevice::Drive:
-        std::cout << "ATTEMPTING TO CONFIGURE A DRIVE MOTOR\n";
         argos_lib::falcon_config::FalconConfig<Competition, Practice>(
             m_modules[moduleIndex].m_drive, timeout, m_instance);
         break;
       case ModuleDevice::Encoder:
-        std::cout << "ATTEMPTING TO CONFIGURE AN ENCODER\n";
         argos_lib::cancoder_config::CanCoderConfig<Competition, Practice>(
             m_modules[moduleIndex].m_encoder, timeout, m_instance);
         break;
@@ -339,21 +340,18 @@ class ArgosSwerve {
     switch (dev) {
       case ModuleDevice::Turn:
         for (unsigned int i = 0; i < m_modules.size(); i++) {
-          std::cout << "ATTEMPTING TO CONFIGURE A TURN MOTOR\n";
           argos_lib::falcon_config::FalconConfig<Competition, Practice>(
               m_modules[i].m_turn, timeout, m_instance);
         }
         break;
       case ModuleDevice::Drive:
         for (unsigned int i = 0; i < m_modules.size(); i++) {
-          std::cout << "ATTEMPTING TO CONFIGURE A DRIVE MOTOR\n";
           argos_lib::falcon_config::FalconConfig<Competition, Practice>(
               m_modules[i].m_drive, timeout, m_instance);
         }
         break;
       case ModuleDevice::Encoder:
         for (unsigned int i = 0; i < m_modules.size(); i++) {
-          std::cout << "ATTEMPTING TO CONFIGURE AN ENCODER\n";
           argos_lib::cancoder_config::CanCoderConfig<Competition, Practice>(
               m_modules[i].m_encoder, timeout, m_instance);
         }

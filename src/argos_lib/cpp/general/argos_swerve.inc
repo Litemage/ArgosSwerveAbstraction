@@ -65,11 +65,13 @@ void ArgosSwerve<N, IMU>::HomeDrivetrainToFS(units::degree_t virtualAngle) {
 
 template <int N, typename IMU>
 bool ArgosSwerve<N, IMU>::InitDrivetrainHomes() {
+  // TODO debugging
+  std::printf("Trying to load from:%s\n", m_config.GetHomesPath().c_str());
   std::optional<std::vector<units::degree_t>> modulePositions =
       m_fsStorage.LoadList(N);
   if (!modulePositions) {
     // ALERT HERE THAT THERE ARE NO VALUES, BUT FOR NOW, JUST PRINT
-    std::printf("%d HEY NO SAVED VALUES IN std::FILE SYSTEM!!!!", __LINE__);
+    std::printf("%d HEY NO SAVED VALUES IN std::FILE SYSTEM!!!!\n", __LINE__);
     return false;
   }
   for (uint i = 0; i < m_modules.size(); i++) {

@@ -11,6 +11,7 @@
 RobotContainer::RobotContainer() : m_swerveDrive{}, m_controllers{0, 1} {
   // Initialize all of your commands and subsystems here
   // Initialize from homes
+  m_swerveDrive.Home(0_deg);
   /* ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― */
   /*                     Drivetrain Defalt Command                    */
   /* ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― */
@@ -32,13 +33,13 @@ RobotContainer::RobotContainer() : m_swerveDrive{}, m_controllers{0, 1} {
             argos_lib::XboxController::JoystickHand::kRightHand);
 
         /* ――― filter for dead area of controller (robot go brr if not) ――― */
-        if (abs(vY) < 0.15) {
+        if (abs(vY) < 0.05) {
           vY = 0;
         }
-        if (abs(vX) < 0.15) {
+        if (abs(vX) < 0.05) {
           vX = 0;
         }
-        if (abs(vR) < 0.15) {
+        if (abs(vR) < 0.05) {
           vR = 0;
         }
 
